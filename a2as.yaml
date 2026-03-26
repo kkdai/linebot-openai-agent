@@ -1,0 +1,112 @@
+manifest:
+  version: "0.1.2"
+  schema: https://a2as.org/cert/schema
+  subject:
+    name: kkdai/linebot-openai-agent
+    source: https://github.com/kkdai/linebot-openai-agent
+    branch: main
+    commit: "8c48f135"
+    scope: [main.py]
+  issued:
+    by: A2AS.org
+    at: '2026-01-26T16:14:50Z'
+  signatures:
+    digest: sha256:GuGxBQ3ZqX3o26WRLktuV2hWMi26CFojEu6oUm4v29M
+    key: ed25519:yrO46NUtLTDTSr0kV5hvQ8Fls7lE9d8mgRPg-Bg5m7k
+    sig: ed25519:q2BDWlx0-RbQLNcRULLZj6ptBrWwVMjEJlmUWBkKzAc0QaHzlSx-77tnhWhepcetPMA6dG6uUC6WoJULSbgKCw
+
+agents:
+  agent:
+    type: instance
+    models: [OpenAIChatCompletionsModel]
+    tools: [get_weather, translate_to_chinese]
+    params:
+      function: generate_text_with_agent
+      name: Assistant
+      instructions: [You are a helpful assistant that responds in Traditional Chinese (zh-TW). Provide informative and helpful
+          responses.]
+
+models:
+  OpenAIChatCompletionsModel:
+    type: function
+    agents: [agent]
+
+tools:
+  get_weather:
+    type: decorator
+    agents: [agent]
+    params:
+      description: Get weather information for a city
+  translate_to_chinese:
+    type: decorator
+    agents: [agent]
+    params:
+      description: Translate text to Traditional Chinese
+
+imports:
+  Agent: agents.Agent
+  aiohttp: aiohttp
+  AiohttpAsyncHttpClient: linebot.aiohttp_async_http_client.AiohttpAsyncHttpClient
+  asyncio: asyncio
+  AsyncLineBotApi: linebot.AsyncLineBotApi
+  AsyncOpenAI: openai.AsyncOpenAI
+  BytesIO: io.BytesIO
+  FastAPI: fastapi.FastAPI
+  function_tool: agents.function_tool
+  HTTPException: fastapi.HTTPException
+  Image: PIL.Image
+  InvalidSignatureError: linebot.exceptions.InvalidSignatureError
+  MessageEvent: linebot.models.MessageEvent
+  OpenAIChatCompletionsModel: agents.OpenAIChatCompletionsModel
+  os: os
+  Request: fastapi.Request
+  Runner: agents.Runner
+  set_tracing_disabled: agents.set_tracing_disabled
+  sys: sys
+  TextSendMessage: linebot.models.TextSendMessage
+  WebhookParser: linebot.WebhookParser
+
+functions:
+  generate_text_with_agent:
+    type: async
+    module: main
+    args: [prompt]
+  get_weather:
+    type: tool
+    module: main
+    args: [city]
+  handle_callback:
+    type: async
+    module: main
+    args: [request]
+  translate_to_chinese:
+    type: tool
+    module: main
+    args: [text]
+
+variables:
+  ChannelAccessToken:
+    type: env
+    params:
+      caller: [os.getenv]
+      path: [main]
+  ChannelSecret:
+    type: env
+    params:
+      caller: [os.getenv]
+      path: [main]
+  EXAMPLE_API_KEY:
+    type: env
+    params:
+      caller: [os.getenv]
+      path: [main]
+  EXAMPLE_BASE_URL:
+    type: env
+    params:
+      caller: [os.getenv]
+      path: [main]
+  EXAMPLE_MODEL_NAME:
+    type: env
+    params:
+      caller: [os.getenv]
+      path: [main]
