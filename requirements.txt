@@ -1,7 +1,8 @@
-line-bot-sdk==3.14.0
-fastapi
-uvicorn[standard]
-openai-agents
-pydantic
-tiktoken
-Pillow
+line-bot-sdk==3.22.0
+fastapi==0.135.2
+uvicorn[standard]==0.42.0
+openai-agents==0.13.1
+openai==1.63.2
+pydantic==2.12.5
+tiktoken==0.12.0
+Pillow==12.1.1

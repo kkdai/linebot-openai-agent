@@ -1,13 +1,16 @@
 import os
 import sys
-import asyncio
-from io import BytesIO
 
 import aiohttp
-import PIL.Image
 from fastapi import Request, FastAPI, HTTPException
 from openai import AsyncOpenAI
-from agents import Agent, OpenAIChatCompletionsModel, Runner, function_tool, set_tracing_disabled
+from agents import (
+    Agent,
+    OpenAIChatCompletionsModel,
+    Runner,
+    function_tool,
+    set_tracing_disabled
+)
 
 from linebot.models import (
     MessageEvent, TextSendMessage
@@ -43,7 +46,8 @@ if channel_access_token is None:
     sys.exit(1)
 if not BASE_URL or not API_KEY or not MODEL_NAME:
     raise ValueError(
-        "Please set EXAMPLE_BASE_URL, EXAMPLE_API_KEY, EXAMPLE_MODEL_NAME via env var or code."
+        "Please set EXAMPLE_BASE_URL, EXAMPLE_API_KEY, "
+        "EXAMPLE_MODEL_NAME via env var or code."
     )
 
 # Initialize the FastAPI app for LINEBot
@@ -117,7 +121,11 @@ async def generate_text_with_agent(prompt):
     # Create agent with appropriate instructions
     agent = Agent(
         name="Assistant",
-        instructions="You are a helpful assistant that responds in Traditional Chinese (zh-TW). Provide informative and helpful responses.",
+        instructions=(
+            "You are a helpful assistant that responds in "
+            "Traditional Chinese (zh-TW). "
+            "Provide informative and helpful responses."
+        ),
         model=OpenAIChatCompletionsModel(
             model=MODEL_NAME, openai_client=client),
         tools=[get_weather, translate_to_chinese],
